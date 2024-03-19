@@ -1,0 +1,27 @@
+name: "Sample reusable workflow in another repository"
+
+on:
+  workflow_dispatch:
+  # workflow_call must be specified for a workflow to be reusable
+  workflow_call:
+    inputs:
+      username:
+        default: JohnDoe
+        type: string
+        description: The user to say hello to
+        required: false
+    # Reusable workflow cannot access secrets by default
+    # They must be passed explicitly
+    # secrets:
+    #   secret_one:
+    #     required: true
+    #     description: A secret that you want to pass to the reusable workflowS
+
+jobs:
+  greet_user:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say Hello to ${{ inputs.username }}
+        env:
+          USERNAME:  ${{ inputs.username }}
+        run: echo "Hello $USERNAME"
